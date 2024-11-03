@@ -11,7 +11,11 @@ namespace FibonacciAssignment
         {
             Stopwatch sw = new Stopwatch();
 
-            for (int x = 5; x < 50; x += 5)
+            int startIndex = 5;
+            int endIndex = 50;
+            int step = 5;
+
+            for (int x = startIndex; x < endIndex; x += step)
             {
                 sw.Reset();
                 sw.Start();
@@ -21,7 +25,7 @@ namespace FibonacciAssignment
             }
             Console.WriteLine("\n\n");
 
-            for (int x = 5; x < 50; x += 5)
+            for (int x = startIndex; x < endIndex; x += step)
             {
                 sw.Reset();
                 sw.Start();
@@ -36,7 +40,7 @@ namespace FibonacciAssignment
             }
             Console.WriteLine("\n\n");
 
-            for (int x = 5; x < 50; x += 5)
+            for (int x = startIndex; x < endIndex; x += step)
             {
                 sw.Reset();
                 sw.Start();
