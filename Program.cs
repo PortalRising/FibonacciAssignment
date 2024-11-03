@@ -25,6 +25,21 @@ namespace FibonacciAssignment
             {
                 sw.Reset();
                 sw.Start();
+                int fib = FibRecurseCached(x, false);
+                sw.Stop();
+                Console.WriteLine(
+                    "Recursive Cached {1}th Fib={2}, Elapsed={0}",
+                    sw.Elapsed,
+                    x,
+                    fib
+                );
+            }
+            Console.WriteLine("\n\n");
+
+            for (int x = 5; x < 50; x += 5)
+            {
+                sw.Reset();
+                sw.Start();
                 int fib = FibIterate(x, false);
                 sw.Stop();
                 Console.WriteLine("Iterative {1}th Fib={2}, Elapsed={0}", sw.Elapsed, x, fib);
@@ -37,9 +52,30 @@ namespace FibonacciAssignment
         //
         static int FibRecurse(int x, bool print = false)
         {
+            if (x < 2)
+            {
+                // Return the known values of fib to prevent us descending forever (also limit x to non-negative values only)
+                // Perhaps use uint next time?
+                return Math.Max(x, 0);
+            }
+            // Calculate fib by calculating the previous two values
+            int fib = FibRecurse(x - 1) + FibRecurse(x - 2);
+
+            if (print == true)
+                Console.Write("Fibanacci = {0}\n", fib);
+
+            return fib;
+        }
+
+        //
+        // Return the xth fibanacci number using recursion and caching
+        // If print set to true, print out debug
+        //
+        static int FibRecurseCached(int x, bool print = false)
+        {
             // Create a local 'inner' function that takes in a cache instead of making the outer function have a
             // default array param to prevent external sources altering our cache and allowing our logic to return invalid results
-            static int InnerFibRecurse(ref int[] cache, int x)
+            static int InnerFibRecurseCached(ref int[] cache, int x)
             {
                 if (x < 2)
                 {
@@ -61,7 +97,9 @@ namespace FibonacciAssignment
                 }
 
                 // Calculate fib by calculating the previous two values
-                int fib = InnerFibRecurse(ref cache, x - 1) + InnerFibRecurse(ref cache, x - 2);
+                int fib =
+                    InnerFibRecurseCached(ref cache, x - 1)
+                    + InnerFibRecurseCached(ref cache, x - 2);
 
                 // Add fib to the cache
                 cache[lookupIndex] = fib;
@@ -73,7 +111,7 @@ namespace FibonacciAssignment
             // Run the inner function to get fib with an empty cache that is the size of x - 1,
             // we remove one because we do not store the first two values of fib but still need to store the latest value of x
             int[] cache = new int[x - 1];
-            int fib = InnerFibRecurse(ref cache, x);
+            int fib = InnerFibRecurseCached(ref cache, x);
 
             if (print == true)
                 Console.Write("Fibanacci = {0}\n", fib);
